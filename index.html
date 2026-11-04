@@ -89,6 +89,8 @@ input,textarea{font:16px var(--body);padding:12px 14px;border-radius:10px;border
 input.bad{border-color:#d4483b}
 .err{color:#d4483b;font-size:13px;font-weight:500;margin:0}
 .hint{color:var(--muted);font-size:13px;margin:0;text-align:center}
+li.soldout .name,li.soldout .price{opacity:.5}
+.so{flex:none;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
 </style>
 </head>
 <body>
@@ -132,81 +134,114 @@ input.bad{border-color:#d4483b}
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
-
-
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt = n => Number(n).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:2});
+const $ = id => document.getElementById(id);
 
-fetch("menu.json",{cache:"no-store"}).then(r=>r.json()).then(data=>{
-const MENU=data.menu;
-MENU.forEach((c,ci)=>c.items.forEach((it,ii)=>it._k=ci+"-"+ii));
-document.getElementById("sample-note").hidden=!data.showSampleNote;
-document.getElementById("chips").innerHTML = MENU.map((c,i)=>
-  `<a class="chip${i?"":" on"}" href="#${slug(c.category)}" data-id="${slug(c.category)}">${esc(c.category)}</a>`).join("");
-document.getElementById("menu").innerHTML = MENU.map(c=>`
+let items = {}, cart = {}, waNum = "", sectionObserver = null;
+
+/* ---------- menu rendering (runs again whenever the menu changes) ---------- */
+function showMenu(data){
+  const MENU = (data.menu || []).filter(c => c.items && c.items.length);
+  waNum = String(data.whatsapp || "").replace(/[^0-9]/g,"");
+  $("sample-note").hidden = !data.showSampleNote;
+  items = {};
+  MENU.forEach(c => c.items.forEach(it => { it._k = c.category + "|" + it.name; items[it._k] = it; }));
+  // drop cart lines whose item was removed or sold out
+  for (const k in cart) if (!items[k] || items[k].available === false) delete cart[k];
+
+  const active = document.querySelector(".chip.on")?.dataset.id;
+  $("chips").innerHTML = MENU.map((c,i) =>
+    `<a class="chip${(active ? slug(c.category)===active : !i) ? " on" : ""}" href="#${slug(c.category)}" data-id="${slug(c.category)}">${esc(c.category)}</a>`).join("");
+  $("menu").innerHTML = MENU.map(c => `
   <section id="${slug(c.category)}">
     <h2>${esc(c.category)}</h2>
-    <ul>${c.items.map(it=>`
-      <li>
-        <div class="row"><span class="name">${esc(it.name)}${it.tag?`<span class="tag">${esc(it.tag)}</span>`:""}</span><span class="dots" aria-hidden="true"></span><span class="price"><small>MVR</small>${fmt(it.price)}</span></div>
-        <div class="item-foot">${it.desc?`<p class="desc">${esc(it.desc)}</p>`:"<span></span>"}<div class="qty" data-key="${esc(it._k)}"></div></div>
+    <ul>${c.items.map(it => `
+      <li class="${it.available === false ? "soldout" : ""}">
+        <div class="row"><span class="name">${esc(it.name)}${it.tag ? `<span class="tag">${esc(it.tag)}</span>` : ""}</span><span class="dots" aria-hidden="true"></span><span class="price"><small>MVR</small>${fmt(it.price)}</span></div>
+        <div class="item-foot">${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : "<span></span>"}${it.available === false ? `<span class="so">Sold out</span>` : `<div class="qty" data-key="${esc(it._k)}"></div>`}</div>
       </li>`).join("")}
     </ul>
   </section>`).join("");
 
-/* ---- ordering ---- */
-const items={}; MENU.forEach(c=>c.items.forEach(it=>items[it._k]=it));
-const cart={};
-const waNum=String(data.whatsapp||"").replace(/[^0-9]/g,"");
-const $=id=>document.getElementById(id);
-const qtyHTML=k=>cart[k]
-  ?`<button class="qbtn" type="button" data-k="${esc(k)}" data-d="-1" aria-label="Remove one">−</button><span class="qn">${cart[k]}</span><button class="qbtn add" type="button" data-k="${esc(k)}" data-d="1" aria-label="Add one">+</button>`
-  :`<button class="qbtn add" type="button" data-k="${esc(k)}" data-d="1" aria-label="Add ${esc(items[k].name)}">+</button>`;
-const totals=()=>{let n=0,t=0;for(const k in cart){n+=cart[k];t+=cart[k]*items[k].price}return{n,t}};
-function render(){
-  document.querySelectorAll(".qty[data-key]").forEach(q=>q.innerHTML=qtyHTML(q.dataset.key));
-  const {n,t}=totals();
-  $("cartbar").hidden=!n; document.body.classList.toggle("has-cart",!!n);
-  $("cartCount").textContent=n+(n===1?" item":" items");
-  $("cartTotal").textContent=$("sheetTotal").textContent="MVR "+fmt(t);
-  $("olist").innerHTML=Object.keys(cart).map(k=>`<li><div class="row"><span class="name">${esc(items[k].name)}</span><div class="qty">${qtyHTML(k)}</div></div><span class="desc">MVR ${fmt(items[k].price*cart[k])}</span></li>`).join("");
-  if(!n) closeSheet();
+  document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", e => {
+    e.preventDefault(); document.getElementById(ch.dataset.id).scrollIntoView(); setOn(ch.dataset.id);
+  }));
+  if ("IntersectionObserver" in window){
+    sectionObserver?.disconnect();
+    sectionObserver = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setOn(e.target.id); }), {rootMargin:"-30% 0px -60% 0px"});
+    document.querySelectorAll("section").forEach(s => sectionObserver.observe(s));
+  }
+  render();
 }
-document.addEventListener("click",e=>{
-  const b=e.target.closest(".qbtn"); if(!b) return;
-  const k=b.dataset.k; cart[k]=(cart[k]||0)+Number(b.dataset.d);
-  if(cart[k]<=0) delete cart[k];
+function setOn(id){
+  document.querySelectorAll(".chip").forEach(ch => {
+    const on = ch.dataset.id === id; ch.classList.toggle("on", on);
+    if (on) ch.parentElement.scrollTo({left: ch.offsetLeft - 16, behavior: "smooth"});
+  });
+}
+function menuError(){
+  $("menu").innerHTML = '<p class="sec-note" style="margin-top:24px">Menu could not load. Please refresh the page.</p>';
+}
+
+/* ---------- ordering ---------- */
+const qtyHTML = k => cart[k]
+  ? `<button class="qbtn" type="button" data-k="${esc(k)}" data-d="-1" aria-label="Remove one">−</button><span class="qn">${cart[k]}</span><button class="qbtn add" type="button" data-k="${esc(k)}" data-d="1" aria-label="Add one">+</button>`
+  : `<button class="qbtn add" type="button" data-k="${esc(k)}" data-d="1" aria-label="Add ${esc(items[k].name)}">+</button>`;
+const totals = () => { let n=0, t=0; for (const k in cart){ n += cart[k]; t += cart[k]*items[k].price; } return {n,t}; };
+function render(){
+  document.querySelectorAll(".qty[data-key]").forEach(q => q.innerHTML = qtyHTML(q.dataset.key));
+  const {n,t} = totals();
+  $("cartbar").hidden = !n; document.body.classList.toggle("has-cart", !!n);
+  $("cartCount").textContent = n + (n===1 ? " item" : " items");
+  $("cartTotal").textContent = $("sheetTotal").textContent = "MVR " + fmt(t);
+  $("olist").innerHTML = Object.keys(cart).map(k => `<li><div class="row"><span class="name">${esc(items[k].name)}</span><div class="qty">${qtyHTML(k)}</div></div><span class="desc">MVR ${fmt(items[k].price*cart[k])}</span></li>`).join("");
+  if (!n) closeSheet();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest(".qbtn"); if (!b) return;
+  const k = b.dataset.k; cart[k] = (cart[k]||0) + Number(b.dataset.d);
+  if (cart[k] <= 0) delete cart[k];
   render();
 });
-function openSheet(){$("sheetBg").hidden=false;document.body.style.overflow="hidden"}
-function closeSheet(){$("sheetBg").hidden=true;document.body.style.overflow=""}
-$("viewOrder").onclick=openSheet;
-$("closeSheet").onclick=closeSheet;
-$("sheetBg").addEventListener("click",e=>{if(e.target===$("sheetBg"))closeSheet()});
-$("tableNo").addEventListener("input",()=>{$("tableNo").classList.remove("bad");$("tableErr").hidden=true});
-$("sendWa").addEventListener("click",e=>{
-  const table=$("tableNo").value.trim();
-  if(!table){e.preventDefault();$("tableNo").classList.add("bad");$("tableErr").hidden=false;$("tableNo").focus();return}
-  if(!waNum){e.preventDefault();$("tableErr").textContent="Ordering is not set up yet. Please order with our staff.";$("tableErr").hidden=false;return}
-  const {t}=totals();
-  const lines=["*New order – Equics Centro*","Table: "+table,""]
-    .concat(Object.keys(cart).map(k=>cart[k]+" × "+items[k].name+" – MVR "+fmt(items[k].price*cart[k])))
-    .concat(["","*Total: MVR "+fmt(t)+"*"]);
-  const note=$("orderNote").value.trim(); if(note) lines.push("Note: "+note);
-  $("sendWa").href="https://wa.me/"+waNum+"?text="+encodeURIComponent(lines.join("\n"));
+function openSheet(){ $("sheetBg").hidden = false; document.body.style.overflow = "hidden"; }
+function closeSheet(){ $("sheetBg").hidden = true; document.body.style.overflow = ""; }
+$("viewOrder").onclick = openSheet;
+$("closeSheet").onclick = closeSheet;
+$("sheetBg").addEventListener("click", e => { if (e.target === $("sheetBg")) closeSheet(); });
+$("tableNo").addEventListener("input", () => { $("tableNo").classList.remove("bad"); $("tableErr").hidden = true; });
+$("sendWa").addEventListener("click", e => {
+  const table = $("tableNo").value.trim();
+  if (!table){ e.preventDefault(); $("tableErr").textContent = "Please enter your table number."; $("tableNo").classList.add("bad"); $("tableErr").hidden = false; $("tableNo").focus(); return; }
+  if (!waNum){ e.preventDefault(); $("tableErr").textContent = "Ordering is not set up yet. Please order with our staff."; $("tableErr").hidden = false; return; }
+  const {t} = totals();
+  const lines = ["*New order – Equics Centro*", "Table: " + table, ""]
+    .concat(Object.keys(cart).map(k => cart[k] + " × " + items[k].name + " – MVR " + fmt(items[k].price*cart[k])))
+    .concat(["", "*Total: MVR " + fmt(t) + "*"]);
+  const note = $("orderNote").value.trim(); if (note) lines.push("Note: " + note);
+  $("sendWa").href = "https://wa.me/" + waNum + "?text=" + encodeURIComponent(lines.join("\n"));
 });
-render();
 
-const chips=[...document.querySelectorAll(".chip")];
-const setOn=id=>chips.forEach(ch=>{const on=ch.dataset.id===id;ch.classList.toggle("on",on);if(on)ch.scrollIntoView({block:"nearest",inline:"nearest"})});
-chips.forEach(ch=>ch.addEventListener("click",e=>{e.preventDefault();document.getElementById(ch.dataset.id).scrollIntoView();setOn(ch.dataset.id)}));
-if("IntersectionObserver" in window){
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setOn(e.target.id)}),{rootMargin:"-30% 0px -60% 0px"});
-  document.querySelectorAll("section").forEach(s=>io.observe(s));
+/* ---------- load: live from Firebase, or menu.json as backup ---------- */
+function loadBackup(){ fetch("menu.json", {cache:"no-store"}).then(r => r.json()).then(showMenu).catch(menuError); }
+const cfg = window.FIREBASE_CONFIG;
+if (window.firebase && cfg && cfg.apiKey){
+  try {
+    firebase.initializeApp(cfg);
+    let gotLive = false;
+    firebase.firestore().doc("menu/main").onSnapshot(snap => {
+      if (snap.exists && (snap.data().menu || []).length){ gotLive = true; showMenu(snap.data()); }
+      else if (!gotLive) loadBackup();
+    }, () => { if (!gotLive) loadBackup(); });
+  } catch (e) { loadBackup(); }
+} else {
+  loadBackup();
 }
-}).catch(()=>{document.getElementById("menu").innerHTML='<p class="sec-note" style="margin-top:24px">Menu could not load. Please refresh the page.</p>'});
 </script>
 </body>
 </html>
