@@ -1,33 +1,107 @@
 {
   "whatsapp": "+9607315082",
-  "showSampleNote": true,
+  "showSampleNote": false,
   "menu": [
     {
-      "category": "Coffee",
+      "category": "Hot Beverages",
       "items": [
-        { "name": "Espresso", "price": 35, "desc": "Single shot, rich and short." },
-        { "name": "Cappuccino", "price": 50, "desc": "Espresso with steamed milk and foam." },
-        { "name": "Iced Latte", "price": 55, "desc": "Espresso over ice with cold milk.", "tag": "Popular" }
+        { "name": "Lavazza Black Coffee", "price": 35 },
+        { "name": "Lavazza Milk Coffee", "price": 40 },
+        { "name": "Lavazza Espresso", "price": 35 },
+        { "name": "Lavazza Cappuccino", "price": 45 },
+        { "name": "Lavazza Latte", "price": 45 },
+        { "name": "Lavazza Mochaccino", "price": 50 },
+        { "name": "Lavazza Hot Choco", "price": 45 }
       ]
     },
     {
-      "category": "Cold Drinks",
+      "category": "Tea",
       "items": [
-        { "name": "Fresh Lime Juice", "price": 40 },
-        { "name": "Mango Smoothie", "price": 60, "desc": "Ripe mango blended with yogurt." }
+        { "name": "Hot Cardamom Tea", "price": 20 },
+        { "name": "Hot Bombay Tea", "price": 20 },
+        { "name": "Hot Lemon Tea", "price": 20 },
+        { "name": "Hot Coffee Milk Tea", "price": 25 }
       ]
     },
     {
-      "category": "Food",
+      "category": "Refreshments",
       "items": [
-        { "name": "Chicken Sandwich", "price": 75, "desc": "Grilled chicken, lettuce, house sauce." },
-        { "name": "Tuna Mas Roshi", "price": 45, "desc": "Roshi wrapped around spiced tuna." }
+        { "name": "Blueberry Slushie", "price": 45 },
+        { "name": "Pink Guava Slushie", "price": 45 },
+        { "name": "Mango Slushie", "price": 45 },
+        { "name": "Mandarin Slushie", "price": 45 },
+        { "name": "Mix Slushie", "price": 50 },
+        { "name": "Tropical Fruit Juice", "price": 40 }
       ]
     },
     {
-      "category": "Desserts",
+      "category": "Fresh Fruit Juice",
       "items": [
-        { "name": "Chocolate Cake", "price": 50 }
+        { "name": "Mixed Fruit Juice", "price": 55 }
+      ]
+    },
+    {
+      "category": "Savory Snacks",
+      "items": [
+        { "name": "Burger", "price": 45 },
+        { "name": "Mini Burger", "price": 25 },
+        { "name": "Panino Sandwich", "price": 50 },
+        { "name": "Hotdog Sandwich", "price": 40 },
+        { "name": "Slice Chicken Sandwich", "price": 35 },
+        { "name": "Toast Sandwich", "price": 30 },
+        { "name": "Bechamel Chicken Roll", "price": 25 },
+        { "name": "Chicken Puff", "price": 18 },
+        { "name": "Egg Puff", "price": 15 },
+        { "name": "Tuna Puff", "price": 15 },
+        { "name": "Tuna Puff Small", "price": 8 },
+        { "name": "Veg Puff", "price": 12 },
+        { "name": "Chicken Spring Roll", "price": 15 },
+        { "name": "Sausage Stick", "price": 15 },
+        { "name": "Sausage Bun", "price": 15 },
+        { "name": "Fishbun Small", "price": 8 }
+      ]
+    },
+    {
+      "category": "Local Snacks",
+      "items": [
+        { "name": "Bajiya", "price": 5 },
+        { "name": "Gulha", "price": 5 },
+        { "name": "Kabaab", "price": 5 },
+        { "name": "Laddu", "price": 5 }
+      ]
+    },
+    {
+      "category": "Sweet Snacks",
+      "items": [
+        { "name": "Japanese Cheese Cake", "price": 35 },
+        { "name": "Almond Croissant", "price": 35 },
+        { "name": "Brownie", "price": 25 },
+        { "name": "Banana Cake with Chocolate", "price": 25 },
+        { "name": "Banana Cake", "price": 20 },
+        { "name": "Butter Cake", "price": 18 },
+        { "name": "Dilkush", "price": 15 },
+        { "name": "Sweet Naan", "price": 15 },
+        { "name": "Doughnut Small", "price": 10 },
+        { "name": "Mini Muffin", "price": 10 }
+      ]
+    },
+    {
+      "category": "Cookies",
+      "items": [
+        { "name": "Chocolate Chip Cookies", "price": 15 },
+        { "name": "Choco Nutella Cookies", "price": 18 },
+        { "name": "Nutella Cookies", "price": 18 },
+        { "name": "Pistachio Cookies", "price": 20 },
+        { "name": "Snickers Cookies", "price": 18 },
+        { "name": "Red Velvet Cookie", "price": 18 },
+        { "name": "Almond Cookies", "price": 15 }
+      ]
+    },
+    {
+      "category": "Ice Cream",
+      "items": [
+        { "name": "Soft-Served Ice Cream Cone", "price": 15 },
+        { "name": "Soft-Served Ice Cream Cup", "price": 20 }
       ]
     }
   ]
