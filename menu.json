@@ -1,0 +1,33 @@
+{
+  "showSampleNote": true,
+  "menu": [
+    {
+      "category": "Coffee",
+      "items": [
+        { "name": "Espresso", "price": 35, "desc": "Single shot, rich and short." },
+        { "name": "Cappuccino", "price": 50, "desc": "Espresso with steamed milk and foam." },
+        { "name": "Iced Latte", "price": 55, "desc": "Espresso over ice with cold milk.", "tag": "Popular" }
+      ]
+    },
+    {
+      "category": "Cold Drinks",
+      "items": [
+        { "name": "Fresh Lime Juice", "price": 40 },
+        { "name": "Mango Smoothie", "price": 60, "desc": "Ripe mango blended with yogurt." }
+      ]
+    },
+    {
+      "category": "Food",
+      "items": [
+        { "name": "Chicken Sandwich", "price": 75, "desc": "Grilled chicken, lettuce, house sauce." },
+        { "name": "Tuna Mas Roshi", "price": 45, "desc": "Roshi wrapped around spiced tuna." }
+      ]
+    },
+    {
+      "category": "Desserts",
+      "items": [
+        { "name": "Chocolate Cake", "price": 50 }
+      ]
+    }
+  ]
+}
