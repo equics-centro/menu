@@ -1,108 +1,402 @@
 {
-  "whatsapp": "+9607315082",
-  "showSampleNote": false,
-  "menu": [
+ "showSampleNote": false,
+ "menu": [
+  {
+   "category": "Hot Beverages",
+   "note": "Lavazza Italian coffee",
+   "items": [
     {
-      "category": "Hot Beverages",
-      "items": [
-        { "name": "Lavazza Black Coffee", "price": 35 },
-        { "name": "Lavazza Milk Coffee", "price": 40 },
-        { "name": "Lavazza Espresso", "price": 35 },
-        { "name": "Lavazza Cappuccino", "price": 45 },
-        { "name": "Lavazza Latte", "price": 45 },
-        { "name": "Lavazza Mochaccino", "price": 50 },
-        { "name": "Lavazza Hot Choco", "price": 45 }
-      ]
+     "name": "Lavazza Black Coffee",
+     "price": 20,
+     "desc": "A rich and bold Lavazza coffee with a smooth, authentic Italian taste."
     },
     {
-      "category": "Tea",
-      "items": [
-        { "name": "Hot Cardamom Tea", "price": 20 },
-        { "name": "Hot Bombay Tea", "price": 20 },
-        { "name": "Hot Lemon Tea", "price": 20 },
-        { "name": "Hot Coffee Milk Tea", "price": 25 }
-      ]
+     "name": "Lavazza Milk Coffee",
+     "price": 30,
+     "desc": "A smooth and balanced Lavazza coffee blended with warm, creamy milk."
     },
     {
-      "category": "Refreshments",
-      "items": [
-        { "name": "Blueberry Slushie", "price": 45 },
-        { "name": "Pink Guava Slushie", "price": 45 },
-        { "name": "Mango Slushie", "price": 45 },
-        { "name": "Mandarin Slushie", "price": 45 },
-        { "name": "Mix Slushie", "price": 50 },
-        { "name": "Tropical Fruit Juice", "price": 40 }
-      ]
+     "name": "Lavazza Espresso",
+     "price": 20,
+     "desc": "A classic Italian espresso with a strong, rich flavour and a smooth finish."
     },
     {
-      "category": "Fresh Fruit Juice",
-      "items": [
-        { "name": "Mixed Fruit Juice", "price": 55 }
-      ]
+     "name": "Lavazza Cappuccino",
+     "price": 35,
+     "desc": "A classic Italian favourite with rich espresso, steamed milk and a layer of velvety foam."
     },
     {
-      "category": "Savory Snacks",
-      "items": [
-        { "name": "Burger", "price": 45 },
-        { "name": "Mini Burger", "price": 25 },
-        { "name": "Panino Sandwich", "price": 50 },
-        { "name": "Hotdog Sandwich", "price": 40 },
-        { "name": "Slice Chicken Sandwich", "price": 35 },
-        { "name": "Toast Sandwich", "price": 30 },
-        { "name": "Bechamel Chicken Roll", "price": 25 },
-        { "name": "Chicken Puff", "price": 18 },
-        { "name": "Egg Puff", "price": 15 },
-        { "name": "Tuna Puff", "price": 15 },
-        { "name": "Tuna Puff Small", "price": 8 },
-        { "name": "Veg Puff", "price": 12 },
-        { "name": "Chicken Spring Roll", "price": 15 },
-        { "name": "Sausage Stick", "price": 15 },
-        { "name": "Sausage Bun", "price": 15 },
-        { "name": "Fishbun Small", "price": 8 }
-      ]
+     "name": "Lavazza Hot Choco",
+     "price": 30,
+     "desc": "A rich and comforting hot chocolate made with premium cocoa."
     },
     {
-      "category": "Local Snacks",
-      "items": [
-        { "name": "Bajiya", "price": 5 },
-        { "name": "Gulha", "price": 5 },
-        { "name": "Kabaab", "price": 5 },
-        { "name": "Laddu", "price": 5 }
-      ]
+     "name": "Lavazza Latte",
+     "price": 35,
+     "desc": "A smooth and creamy coffee made with a shot of Lavazza espresso and steamed milk."
     },
     {
-      "category": "Sweet Snacks",
-      "items": [
-        { "name": "Japanese Cheese Cake", "price": 35 },
-        { "name": "Almond Croissant", "price": 35 },
-        { "name": "Brownie", "price": 25 },
-        { "name": "Banana Cake with Chocolate", "price": 25 },
-        { "name": "Banana Cake", "price": 20 },
-        { "name": "Butter Cake", "price": 18 },
-        { "name": "Dilkush", "price": 15 },
-        { "name": "Sweet Naan", "price": 15 },
-        { "name": "Doughnut Small", "price": 10 },
-        { "name": "Mini Muffin", "price": 10 }
-      ]
-    },
-    {
-      "category": "Cookies",
-      "items": [
-        { "name": "Chocolate Chip Cookies", "price": 15 },
-        { "name": "Choco Nutella Cookies", "price": 18 },
-        { "name": "Nutella Cookies", "price": 18 },
-        { "name": "Pistachio Cookies", "price": 20 },
-        { "name": "Snickers Cookies", "price": 18 },
-        { "name": "Red Velvet Cookie", "price": 18 },
-        { "name": "Almond Cookies", "price": 15 }
-      ]
-    },
-    {
-      "category": "Ice Cream",
-      "items": [
-        { "name": "Soft-Served Ice Cream Cone", "price": 15 },
-        { "name": "Soft-Served Ice Cream Cup", "price": 20 }
-      ]
+     "name": "Lavazza Mochaccino",
+     "price": 35,
+     "desc": "A delicious blend of Lavazza espresso, rich chocolate and creamy steamed milk."
     }
-  ]
+   ]
+  },
+  {
+   "category": "Tea",
+   "items": [
+    {
+     "name": "Hot Cardamom Tea",
+     "price": 10,
+     "desc": "Aromatic black tea infused with the rich, warm flavour of cardamom."
+    },
+    {
+     "name": "Hot Bombay Tea",
+     "price": 10,
+     "desc": "A rich and flavourful Indian-style masala tea with a perfect blend of spices."
+    },
+    {
+     "name": "Hot Lemon Tea",
+     "price": 10,
+     "desc": "A refreshing hot tea with a zesty lemon flavour."
+    },
+    {
+     "name": "Hot Coffee Milk Tea",
+     "price": 10,
+     "desc": "A smooth and creamy blend of tea and coffee with rich milk flavour."
+    }
+   ]
+  },
+  {
+   "category": "Refreshments",
+   "note": "Slushies and juice, in medium or large",
+   "items": [
+    {
+     "name": "Blueberry Slushie",
+     "price": 25,
+     "desc": "A cool and refreshing slushie with the rich, fruity taste of blueberries.",
+     "sizes": [
+      {
+       "label": "Medium",
+       "price": 25
+      },
+      {
+       "label": "Large",
+       "price": 30
+      }
+     ]
+    },
+    {
+     "name": "Pink Guava Slushie",
+     "price": 25,
+     "desc": "A refreshing slushie with the tropical sweetness of pink guava.",
+     "sizes": [
+      {
+       "label": "Medium",
+       "price": 25
+      },
+      {
+       "label": "Large",
+       "price": 30
+      }
+     ]
+    },
+    {
+     "name": "Mango Slushie",
+     "price": 25,
+     "desc": "A tropical slushie made with the natural sweetness of ripe mangoes.",
+     "sizes": [
+      {
+       "label": "Medium",
+       "price": 25
+      },
+      {
+       "label": "Large",
+       "price": 30
+      }
+     ]
+    },
+    {
+     "name": "Mandarin Slushie",
+     "price": 25,
+     "desc": "A bright and zesty slushie with the refreshing taste of mandarin.",
+     "sizes": [
+      {
+       "label": "Medium",
+       "price": 25
+      },
+      {
+       "label": "Large",
+       "price": 30
+      }
+     ]
+    },
+    {
+     "name": "Mix Slushie",
+     "price": 19,
+     "desc": "A refreshing blend of selected tropical fruits for a rich and fruity slushie.",
+     "sizes": [
+      {
+       "label": "Medium",
+       "price": 19
+      },
+      {
+       "label": "Large",
+       "price": 24
+      }
+     ]
+    },
+    {
+     "name": "Tropical Fruit Juice",
+     "price": 25,
+     "desc": "A refreshing juice made from a selection of tropical fruits.",
+     "sizes": [
+      {
+       "label": "Medium",
+       "price": 25
+      },
+      {
+       "label": "Large",
+       "price": 30
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "category": "Fresh Fruit Juice",
+   "items": [
+    {
+     "name": "Mixed Fruit Juice",
+     "price": 70,
+     "desc": "A refreshing blend of freshly selected seasonal fruits."
+    }
+   ]
+  },
+  {
+   "category": "Savory Snacks",
+   "note": "Burgers, sandwiches, puffs and rolls",
+   "items": [
+    {
+     "name": "Burger",
+     "price": 28,
+     "desc": "A classic burger with a juicy patty and fresh toppings.",
+     "group": "Burgers & Sandwiches"
+    },
+    {
+     "name": "Mini Burger",
+     "price": 70,
+     "desc": "A bite-sized burger packed with classic flavour.",
+     "group": "Burgers & Sandwiches"
+    },
+    {
+     "name": "Slice Chicken Sandwich",
+     "price": 35,
+     "desc": "Soft sandwich with sliced chicken and fresh fillings.",
+     "group": "Burgers & Sandwiches"
+    },
+    {
+     "name": "Panino Sandwich",
+     "price": 18,
+     "desc": "A toasted panino with chicken, cheese and vegetables.",
+     "group": "Burgers & Sandwiches"
+    },
+    {
+     "name": "Hotdog Sandwich",
+     "price": 20,
+     "desc": "Classic hotdog sandwich with a tasty sausage.",
+     "group": "Burgers & Sandwiches"
+    },
+    {
+     "name": "Toast Sandwich",
+     "price": 10,
+     "desc": "Crispy toasted sandwich with a delicious filling.",
+     "group": "Burgers & Sandwiches"
+    },
+    {
+     "name": "Egg Puff",
+     "price": 20,
+     "desc": "Flaky pastry filled with a rich egg filling.",
+     "group": "Puffs"
+    },
+    {
+     "name": "Chicken Puff",
+     "price": 30,
+     "desc": "Crispy puff with flavourful chicken filling.",
+     "group": "Puffs"
+    },
+    {
+     "name": "Tuna Puff",
+     "desc": "A flaky puff filled with tasty tuna.",
+     "group": "Puffs",
+     "available": false
+    },
+    {
+     "name": "Tuna Puff Small",
+     "desc": "A mini tuna puff, perfect for a quick bite.",
+     "group": "Puffs",
+     "available": false
+    },
+    {
+     "name": "Veg Puff",
+     "desc": "Crispy puff filled with a tasty vegetable mixture.",
+     "group": "Puffs",
+     "available": false
+    },
+    {
+     "name": "Bechamel Chicken Roll",
+     "desc": "Crispy roll with creamy bechamel chicken filling.",
+     "group": "Rolls",
+     "available": false
+    },
+    {
+     "name": "Chicken Spring Roll",
+     "desc": "Crispy roll filled with seasoned chicken and vegetables.",
+     "group": "Rolls",
+     "available": false
+    },
+    {
+     "name": "Sausage Stick",
+     "price": 6,
+     "desc": "A crispy, savoury sausage stick.",
+     "group": "Other Snacks"
+    },
+    {
+     "name": "Sausage Bun",
+     "desc": "A soft bun with a tasty sausage.",
+     "group": "Other Snacks",
+     "available": false
+    }
+   ]
+  },
+  {
+   "category": "Local Snacks",
+   "note": "Maldivian hedhikaa",
+   "items": [
+    {
+     "name": "Bajiya",
+     "price": 6,
+     "desc": "Crispy Maldivian pastry filled with spiced tuna."
+    },
+    {
+     "name": "Gulha",
+     "price": 2,
+     "desc": "Traditional Maldivian snack with tuna, onion and coconut."
+    },
+    {
+     "name": "Kabaab",
+     "price": 5,
+     "desc": "Flavourful Maldivian kebab made with fish, spices and herbs."
+    },
+    {
+     "name": "Laddu",
+     "desc": "Classic sweet ball made with gram flour, sugar and ghee.",
+     "available": false
+    }
+   ]
+  },
+  {
+   "category": "Sweet Snacks",
+   "items": [
+    {
+     "name": "Banana Cake",
+     "price": 20,
+     "desc": "Soft and moist banana cake with rich flavour."
+    },
+    {
+     "name": "Banana Cake with Chocolate",
+     "price": 20,
+     "desc": "Moist banana cake with chocolate topping."
+    },
+    {
+     "name": "Japanese Cheese Cake",
+     "price": 75,
+     "desc": "Light and fluffy Japanese-style cheese cake."
+    },
+    {
+     "name": "Dilkush",
+     "desc": "Classic sweet bun with coconut and fruit filling."
+    },
+    {
+     "name": "Doughnut Small",
+     "desc": "Soft and fluffy small doughnut."
+    },
+    {
+     "name": "Almond Croissant",
+     "desc": "Flaky croissant with almond topping."
+    },
+    {
+     "name": "Sweet Naan",
+     "desc": "Soft naan with sweet topping."
+    },
+    {
+     "name": "Butter Cake",
+     "desc": "Classic buttery cake with rich taste."
+    },
+    {
+     "name": "Mini Muffin",
+     "desc": "Soft and tasty mini muffin."
+    },
+    {
+     "name": "Brownie",
+     "desc": "Rich and fudgy chocolate brownie."
+    }
+   ]
+  },
+  {
+   "category": "Cookies",
+   "items": [
+    {
+     "name": "Chocolate Chip Cookies",
+     "price": 15,
+     "desc": "Classic cookie with rich chocolate chips."
+    },
+    {
+     "name": "Choco Nutella Cookies",
+     "price": 15,
+     "desc": "Soft cookie with creamy Nutella filling."
+    },
+    {
+     "name": "Pistachio Cookies",
+     "price": 15,
+     "desc": "Delicious cookie with premium pistachios."
+    },
+    {
+     "name": "Snickers Cookies",
+     "price": 15,
+     "desc": "A perfect blend of Snickers, peanuts and caramel."
+    },
+    {
+     "name": "Red Velvet Cookie",
+     "price": 15,
+     "desc": "Rich red velvet cookie with white chocolate."
+    },
+    {
+     "name": "Nutella Cookies",
+     "price": 12,
+     "desc": "Soft cookie with creamy Nutella."
+    },
+    {
+     "name": "Almond Cookies",
+     "price": 12,
+     "desc": "Buttery cookie topped with sliced almonds."
+    }
+   ]
+  },
+  {
+   "category": "Ice Cream",
+   "items": [
+    {
+     "name": "Soft-Served Ice Cream Cone",
+     "price": 20,
+     "desc": "Smooth, creamy soft-serve ice cream in a crispy cone."
+    },
+    {
+     "name": "Soft-Served Ice Cream Cup",
+     "price": 25,
+     "desc": "Smooth, creamy soft-serve ice cream served in a cup."
+    }
+   ]
+  }
+ ]
 }
