@@ -63,32 +63,8 @@ footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 footer .wrap{padding-block:20px 32px}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
-/* ordering */
-.row .name{flex:0 1 auto}
-.qty{display:flex;align-items:center;gap:6px;flex:none}
-.qbtn{width:34px;height:34px;border-radius:999px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);font:700 20px/1 var(--body);cursor:pointer;display:grid;place-items:center;padding:0}
-.qbtn.add{background:var(--accent);color:var(--accent-ink)}
-.qbtn:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.qn{min-width:18px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
 .item-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
-body.has-cart{padding-bottom:84px}
-.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--line)}
-.btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:608px;margin:0 auto;border:0;border-radius:14px;padding:15px 18px;background:var(--accent);color:var(--accent-ink);font:700 16px var(--body);cursor:pointer;text-decoration:none}
-.btn.wa{background:#1fa855;color:#fff;justify-content:center}
-.sheet-bg{position:fixed;inset:0;z-index:30;background:rgba(5,15,13,.55);display:flex;align-items:flex-end;justify-content:center}
-.sheet{background:var(--bg);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;gap:16px}
-.sheet-head{display:flex;justify-content:space-between;align-items:center}
-.sheet h3{font-family:var(--display);font-size:24px;margin:0}
-.x{border:0;background:none;color:var(--muted);font-size:28px;line-height:1;cursor:pointer;padding:4px 8px}
-.olist li{padding:10px 0}
-.olist .row{justify-content:space-between}
-.total{display:flex;justify-content:space-between;font-weight:700;font-size:18px;border-top:1px solid var(--line);padding-top:12px}
-.total span:last-child{color:var(--accent);font-variant-numeric:tabular-nums}
-label{display:grid;gap:6px;font-weight:600;font-size:14px}
-input,textarea{font:16px var(--body);padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
-input.bad{border-color:#d4483b}
-.err{color:#d4483b;font-size:13px;font-weight:500;margin:0}
-.hint{color:var(--muted);font-size:13px;margin:0;text-align:center}
+.item-foot:empty{display:none}
 li.soldout .name,li.soldout .price{opacity:.5}
 .so{flex:none;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
 </style>
@@ -113,27 +89,6 @@ li.soldout .name,li.soldout .price{opacity:.5}
 
 <footer><div class="wrap">Prices in Maldivian Rufiyaa (MVR). Please ask our staff about allergens.</div></footer>
 
-<div class="cartbar" id="cartbar" hidden>
-  <button class="btn" id="viewOrder" type="button"><span id="cartCount">1 item</span><span>View order · <span id="cartTotal">MVR 0</span></span></button>
-</div>
-
-<div class="sheet-bg" id="sheetBg" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <div class="sheet-head"><h3 id="sheetTitle">Your order</h3><button class="x" id="closeSheet" type="button" aria-label="Close">×</button></div>
-    <ul class="olist" id="olist"></ul>
-    <div class="total"><span>Total</span><span id="sheetTotal">MVR 0</span></div>
-    <label for="tableNo">Table number
-      <input id="tableNo" inputmode="numeric" autocomplete="off" placeholder="e.g. 5" maxlength="6">
-    </label>
-    <p class="err" id="tableErr" hidden>Please enter your table number.</p>
-    <label for="orderNote">Note (optional)
-      <textarea id="orderNote" rows="2" placeholder="e.g. less sugar, no ice"></textarea>
-    </label>
-    <a class="btn wa" id="sendWa" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
-    <p class="hint">WhatsApp will open with your order. Tap send to place it.</p>
-  </div>
-</div>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
@@ -143,17 +98,12 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const fmt = n => Number(n).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:2});
 const $ = id => document.getElementById(id);
 
-let items = {}, cart = {}, waNum = "", sectionObserver = null;
+let sectionObserver = null;
 
 /* ---------- menu rendering (runs again whenever the menu changes) ---------- */
 function showMenu(data){
   const MENU = (data.menu || []).filter(c => c.items && c.items.length);
-  waNum = String(data.whatsapp || "").replace(/[^0-9]/g,"");
   $("sample-note").hidden = !data.showSampleNote;
-  items = {};
-  MENU.forEach(c => c.items.forEach(it => { it._k = c.category + "|" + it.name; items[it._k] = it; }));
-  // drop cart lines whose item was removed or sold out
-  for (const k in cart) if (!items[k] || items[k].available === false) delete cart[k];
 
   const active = document.querySelector(".chip.on")?.dataset.id;
   $("chips").innerHTML = MENU.map((c,i) =>
@@ -164,7 +114,7 @@ function showMenu(data){
     <ul>${c.items.map(it => `
       <li class="${it.available === false ? "soldout" : ""}">
         <div class="row"><span class="name">${esc(it.name)}${it.tag ? `<span class="tag">${esc(it.tag)}</span>` : ""}</span><span class="dots" aria-hidden="true"></span><span class="price"><small>MVR</small>${fmt(it.price)}</span></div>
-        <div class="item-foot">${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : "<span></span>"}${it.available === false ? `<span class="so">Sold out</span>` : `<div class="qty" data-key="${esc(it._k)}"></div>`}</div>
+        ${it.desc || it.available === false ? `<div class="item-foot">${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : "<span></span>"}${it.available === false ? `<span class="so">Sold out</span>` : ""}</div>` : ""}
       </li>`).join("")}
     </ul>
   </section>`).join("");
@@ -177,7 +127,6 @@ function showMenu(data){
     sectionObserver = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setOn(e.target.id); }), {rootMargin:"-30% 0px -60% 0px"});
     document.querySelectorAll("section").forEach(s => sectionObserver.observe(s));
   }
-  render();
 }
 function setOn(id){
   document.querySelectorAll(".chip").forEach(ch => {
@@ -188,44 +137,6 @@ function setOn(id){
 function menuError(){
   $("menu").innerHTML = '<p class="sec-note" style="margin-top:24px">Menu could not load. Please refresh the page.</p>';
 }
-
-/* ---------- ordering ---------- */
-const qtyHTML = k => cart[k]
-  ? `<button class="qbtn" type="button" data-k="${esc(k)}" data-d="-1" aria-label="Remove one">−</button><span class="qn">${cart[k]}</span><button class="qbtn add" type="button" data-k="${esc(k)}" data-d="1" aria-label="Add one">+</button>`
-  : `<button class="qbtn add" type="button" data-k="${esc(k)}" data-d="1" aria-label="Add ${esc(items[k].name)}">+</button>`;
-const totals = () => { let n=0, t=0; for (const k in cart){ n += cart[k]; t += cart[k]*items[k].price; } return {n,t}; };
-function render(){
-  document.querySelectorAll(".qty[data-key]").forEach(q => q.innerHTML = qtyHTML(q.dataset.key));
-  const {n,t} = totals();
-  $("cartbar").hidden = !n; document.body.classList.toggle("has-cart", !!n);
-  $("cartCount").textContent = n + (n===1 ? " item" : " items");
-  $("cartTotal").textContent = $("sheetTotal").textContent = "MVR " + fmt(t);
-  $("olist").innerHTML = Object.keys(cart).map(k => `<li><div class="row"><span class="name">${esc(items[k].name)}</span><div class="qty">${qtyHTML(k)}</div></div><span class="desc">MVR ${fmt(items[k].price*cart[k])}</span></li>`).join("");
-  if (!n) closeSheet();
-}
-document.addEventListener("click", e => {
-  const b = e.target.closest(".qbtn"); if (!b) return;
-  const k = b.dataset.k; cart[k] = (cart[k]||0) + Number(b.dataset.d);
-  if (cart[k] <= 0) delete cart[k];
-  render();
-});
-function openSheet(){ $("sheetBg").hidden = false; document.body.style.overflow = "hidden"; }
-function closeSheet(){ $("sheetBg").hidden = true; document.body.style.overflow = ""; }
-$("viewOrder").onclick = openSheet;
-$("closeSheet").onclick = closeSheet;
-$("sheetBg").addEventListener("click", e => { if (e.target === $("sheetBg")) closeSheet(); });
-$("tableNo").addEventListener("input", () => { $("tableNo").classList.remove("bad"); $("tableErr").hidden = true; });
-$("sendWa").addEventListener("click", e => {
-  const table = $("tableNo").value.trim();
-  if (!table){ e.preventDefault(); $("tableErr").textContent = "Please enter your table number."; $("tableNo").classList.add("bad"); $("tableErr").hidden = false; $("tableNo").focus(); return; }
-  if (!waNum){ e.preventDefault(); $("tableErr").textContent = "Ordering is not set up yet. Please order with our staff."; $("tableErr").hidden = false; return; }
-  const {t} = totals();
-  const lines = ["*New order – Equics Centro*", "Table: " + table, ""]
-    .concat(Object.keys(cart).map(k => cart[k] + " × " + items[k].name + " – MVR " + fmt(items[k].price*cart[k])))
-    .concat(["", "*Total: MVR " + fmt(t) + "*"]);
-  const note = $("orderNote").value.trim(); if (note) lines.push("Note: " + note);
-  $("sendWa").href = "https://wa.me/" + waNum + "?text=" + encodeURIComponent(lines.join("\n"));
-});
 
 /* ---------- load: live from Firebase, or menu.json as backup ---------- */
 function loadBackup(){ fetch("menu.json", {cache:"no-store"}).then(r => r.json()).then(showMenu).catch(menuError); }
